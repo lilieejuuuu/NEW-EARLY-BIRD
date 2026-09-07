@@ -5,13 +5,10 @@ import streamlit as st
 st.set_page_config(page_title="早鳥計算機", layout="wide")
 
 st.title("早鳥計算機")
-st.write(
-    "支援兩種計算方式：1. 輸入「常態價格」自動推算早鳥價｜2. 直接輸入「更新後的早鳥價」計算調幅"
-)
 
 st.write("---")
 
-# --- 1. 基本設定（早鳥原價與方案） ---
+# --- 1. 基本設定 ---
 col1, col2 = st.columns(2)
 
 with col1:
@@ -34,35 +31,21 @@ current_discount = discount_map[eb_scheme]
 
 st.write("---")
 
-# --- 2. 輸入區域（二選一或混合輸入） ---
+# --- 2. 價格輸入（已精簡欄位名稱與刪除說明） ---
 st.subheader("價格輸入")
 
 col_normal, col_direct_eb = st.columns(2)
 
 with col_normal:
-    st.markdown("### 方式 A：輸入最新常態價格")
-    st.caption("輸入常態 1 泊 2 食價格，系統會自動按折扣率算出目標早鳥價。")
-    normal_prices_input = st.text_area(
-        "常態價格（可一次貼上多筆）：",
-        value="",
-        placeholder="例如：\n15900\n13680",
-        height=150,
-    )
+    normal_prices_input = st.text_area("常態價格", value="", height=150)
 
 with col_direct_eb:
-    st.markdown("### 方式 B：直接輸入更新後的早鳥價（非必填）")
-    st.caption("若漏掉常態價格，可直接填寫已知的更新後早鳥價。")
-    direct_eb_input = st.text_area(
-        "更新後的早鳥價（可一次貼上多筆）：",
-        value="",
-        placeholder="例如：\n14060",
-        height=150,
-    )
+    direct_eb_input = st.text_area("更新後的早鳥價", value="", height=150)
 
 # --- 3. 運算與輸出 ---
 results = []
 
-# 處理方式 A（透過常態價格計算）
+# 處理常態價格輸入
 if normal_prices_input.strip():
     raw_numbers_a = re.findall(
         r"\d+(?:\.\d+)?", normal_prices_input.replace(",", "")
@@ -78,7 +61,6 @@ if normal_prices_input.strip():
 
         results.append(
             {
-                "計算來源": "常態價格推算",
                 "早鳥原價": int(early_bird_orig),
                 "常態價格": int(p),
                 "目標/更新後早鳥價": int(target_eb_price),
@@ -86,7 +68,7 @@ if normal_prices_input.strip():
             }
         )
 
-# 處理方式 B（直接使用更新後的早鳥價）
+# 處理更新後的早鳥價輸入
 if direct_eb_input.strip():
     raw_numbers_b = re.findall(
         r"\d+(?:\.\d+)?", direct_eb_input.replace(",", "")
@@ -101,7 +83,6 @@ if direct_eb_input.strip():
 
         results.append(
             {
-                "計算來源": "直接輸入早鳥價",
                 "早鳥原價": int(early_bird_orig),
                 "常態價格": "-",
                 "目標/更新後早鳥價": int(eb_price),
@@ -119,7 +100,6 @@ if results:
         use_container_width=True,
         hide_index=True,
         column_config={
-            "計算來源": st.column_config.TextColumn("計算來源"),
             "早鳥原價": st.column_config.NumberColumn(
                 "早鳥原價", format="%d円"
             ),
