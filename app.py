@@ -5,9 +5,6 @@ import streamlit as st
 st.set_page_config(page_title="早鳥計算機", layout="wide")
 
 st.title("早鳥計算機")
-st.write(
-    "支援兩種計算方式：1. 輸入「常態價格」自動推算早鳥價｜2. 直接輸入「更新後的早鳥價」計算調幅"
-)
 
 st.write("---")
 
@@ -40,24 +37,12 @@ st.subheader("價格輸入")
 col_normal, col_direct_eb = st.columns(2)
 
 with col_normal:
-    st.markdown("### 方式 A：輸入最新常態價格")
-    st.caption("輸入常態 1 泊 2 食價格，系統會自動按折扣率算出目標早鳥價。")
-    normal_prices_input = st.text_area(
-        "常態價格（可一次貼上多筆）：",
-        value="",
-        placeholder="例如：\n15900\n13680",
-        height=150,
-    )
+    st.markdown("最新常態價格")
+    st.caption("輸入最新常態 1 泊 2 食價格")
 
 with col_direct_eb:
-    st.markdown("### 方式 B：直接輸入更新後的早鳥價（非必填）")
-    st.caption("若漏掉常態價格，可直接填寫已知的更新後早鳥價。")
-    direct_eb_input = st.text_area(
-        "更新後的早鳥價（可一次貼上多筆）：",
-        value="",
-        placeholder="例如：\n14060",
-        height=150,
-    )
+    st.markdown("更新後的早鳥價")
+    st.caption("輸入最新早鳥價")
 
 # --- 3. 運算與輸出 ---
 results = []
